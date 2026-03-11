@@ -23,21 +23,21 @@ jobs:
         env:
           O360_API_KEY: ${{ secrets.O360_API_KEY }}
         run: |
-          HTTP_CODE=$(curl -s -o /tmp/o360_resp.json -w "%{http_code}" -X POST \
+          HTTP_CODE=$(curl -sk -o /tmp/o360_resp.json -w "%{http_code}" -X POST \
             -H "Authorization: Bearer $O360_API_KEY" \
             -F "FileSource=@source.zip" \
-            -F "Name=cicd-wizard-test" \
+            -F "Name=mainGithub" \
             -F "ExternalScanSourceType=5" \
             -F "DontWaitForScanToComplete=true" \
             -F "AllowDependencyScan=true" \
             -F "AllowLicenseScan=true" \
             -F "AllowMalwareScan=true" \
             -F "PipelineUrl=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-            "https://80.209.226.132:10102/app/api/ExternalScan")
+            "https://80.209.226.132:9092/app/api/ExternalScan")
           cat /tmp/o360_resp.json
           [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ] || exit 1
 
       - name: View results
         if: always()
         run: |
-          echo "Results: https://80.209.226.132:10102/Projects"
+          echo "Results: https://80.209.226.132:9092/Projects"
