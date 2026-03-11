@@ -39,4 +39,5 @@ jobs:
 
       - name: View results
         if: always()
-        run: echo "Results: https://sast.offensive360.com/Projects"
+        run: |
+          echo "Results: https://sast.offensive360.com/Projects"
