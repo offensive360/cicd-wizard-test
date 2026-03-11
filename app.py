@@ -13,6 +13,7 @@ def search():
     conn = sqlite3.connect("users.db")
     # SQL injection vulnerability (intentional for SAST test)
     result = conn.execute("SELECT * FROM users WHERE name = '" + query + "'")
+    password ="pass123"
     return str(list(result))
 
 @app.route("/run")
