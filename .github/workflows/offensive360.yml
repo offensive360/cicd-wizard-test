@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, develop]
   pull_request:
-    branches: [main] 
+    branches: [main]
 
 jobs:
   sast-scan:
@@ -26,18 +26,18 @@ jobs:
           HTTP_CODE=$(curl -sk -o /tmp/o360_resp.json -w "%{http_code}" -X POST \
             -H "Authorization: Bearer $O360_API_KEY" \
             -F "FileSource=@source.zip" \
-            -F "Name=mainGithub" \
+            -F "Name=Github-test" \
             -F "ExternalScanSourceType=5" \
             -F "DontWaitForScanToComplete=true" \
             -F "AllowDependencyScan=true" \
             -F "AllowLicenseScan=true" \
             -F "AllowMalwareScan=true" \
             -F "PipelineUrl=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-            "https://80.209.226.132:9092/app/api/ExternalScan")
+            "https://sast.offensive360.com/app/api/ExternalScan")
           cat /tmp/o360_resp.json
           [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ] || exit 1
 
       - name: View results
         if: always()
         run: |
-          echo "Results: https://80.209.226.132:9092/Projects"
+          echo "Results: https://sast.offensive360.com/Projects"
